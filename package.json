@@ -1,0 +1,34 @@
+{
+  "name": "prepare",
+  "version": "0.5.1",
+  "description": "it only works if you believe in it",
+  "main": "main.js",
+  "scripts": {
+    "electron": "electron .",
+    "web": "node app/server/server.js",
+    "web-dev": "nodemon app/server/server.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "prepare",
+    "mac": {
+      "category": "awake.awake.awake.awake"
+    }
+  },
+  "postinstall": "electron-builder install-app-deps",
+  "repository": "https://github.com/brokyo/prepare_electron",
+  "author": "apc",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^8.0.1",
+    "electron-builder": "^22.3.2"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "electron-json-storage": "^4.1.8",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "node-hue-api": "^4.0.5"
+  }
+}

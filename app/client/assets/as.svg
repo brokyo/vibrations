@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0.927 42.855 490.277 405.39" width="490.277" height="405.39" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <a href="https://awakening.systems" target="_blank">
+    <g transform="matrix(1, 0, 0, 1, 1, 0.000008)">
+      <title>eyeball</title>
+      <circle style="stroke-width: 4px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="249.301" cy="249.427" r="43.761" transform="matrix(1.079183, 0, 0, 1.052322, -19.041391, -12.47753)"/>
+      <circle style="stroke-width: 5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="21.455"/>
+      <g transform="matrix(1, 0, 0, 1, -0.000048, 0.000172)">
+        <circle style="stroke-width: 3.5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="6.244" transform="matrix(0, -1, 1, 0, 0, 466)"/>
+        <circle style="stroke-width: 3.5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="6.244" transform="matrix(0, -1, 1, 0, 0, 534)"/>
+        <circle style="stroke-width: 3.5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="6.244" transform="matrix(0, -1, 1, 0, 34, 500)"/>
+        <circle style="stroke-width: 3.5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="6.244" transform="matrix(0, -1, 1, 0, -34, 500)"/>
+        <circle style="stroke-width: 3.5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="6.244" transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -79.511871, 225.958374)"/>
+        <circle style="stroke-width: 3.5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="6.244" transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -127.595131, 274.041626)"/>
+        <circle style="stroke-width: 3.5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="6.244" transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -79.511871, 274.041626)"/>
+        <circle style="stroke-width: 3.5px; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="250" cy="250" r="6.244" transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -127.595131, 225.958374)"/>
+      </g>
+    </g>
+    <path d="M 350.74 250.828 C 347.586 261.948 299.724 298.427 249.304 298.952 C 198.884 299.477 147.446 256.989 149.166 248.109 C 150.886 239.229 198.077 201.31 249.993 201.045 C 301.909 200.78 353.894 239.708 350.74 250.828 Z M 144.318 322.309 C 155.389 337.764 169.951 352.128 189.582 359.063 L 312.574 360.007 C 316.457 364.621 399.761 303.303 371.53 215.93 C 369.764 210.463 358.504 163.831 315.598 139.75 L 182.9 139.75 C 118.196 179.551 106.037 268.873 144.318 322.309 Z" style="stroke-width: 4px; fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+      <title>eye</title>
+    </path>
+  </a>
+</svg>

@@ -1,0 +1,33 @@
+<html>
+
+<head>
+  <title>toward a new world | awakening.systems</title>
+  <link rel="icon" href="assets/as.ico">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Abel" />
+  <script src="https://unpkg.com/lodash"></script>
+  <script src="https://unpkg.com/p5@0.10.2/lib/p5.js"></script>
+  <script src="https://unpkg.com/tone@latest/build/Tone.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.0/chroma.min.js"></script>
+  <script src="vendor/tonal.js"></script>
+  <!--TODO: These are just big objects. Is there a better way to store this? -->
+  <script src="assets/formants.js"></script>
+  <script src="assets/colorMap.js"></script>
+</head>
+<body>
+	<div id="canvas-holder"></div>
+	<img id="screenshot-button" src="assets/camera.svg" title="screenshot"></img>
+	<img id="fullscreen-button" src="assets/fullscreen.svg" title=" fullscreen"></img>
+	<img id="info-button" src="assets/info.svg" title="info"></img>
+	<div id="about-banner">
+		<p>Prepare is a cybermystic tool that helps the universe communicate through the "meaningful coincidence" created by the unknowability of interconnected systems.</p>
+		<p>It combines light, color, sound, and AI-generated text. Integrates with Philips Hue.</p>
+		<p>It only works if you believe in it.</p>
+		<p><a href="https://github.com/brokyo/prepare" target="_blank">[Read More]</a></p>
+	
+		<div id="start-button"><span>[begin]</span></div>
+	</div>
+	<img id="logo" src="assets/as.svg" onmouseover="hover(this)" onmouseout="unhover(this)" />
+	<script src="js/prepare.js"></script>
+</body>
+</html>
