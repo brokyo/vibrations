@@ -7,8 +7,8 @@
     "electron": "electron .",
     "web": "node app/server/server.js",
     "web-dev": "nodemon app/server/server.js",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "build": "electron-builder build --mac --dir --publish never",
+    "deploy": "electron-builder build --mac --dir --publish always"
   },
   "build": {
     "appId": "prepare",
@@ -17,7 +17,10 @@
     }
   },
   "postinstall": "electron-builder install-app-deps",
-  "repository": "https://github.com/brokyo/prepare_electron",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brokyo/prepare_electron"
+  },
   "author": "apc",
   "license": "CC0-1.0",
   "devDependencies": {
@@ -27,6 +30,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.4",
     "electron-json-storage": "^4.1.8",
+    "electron-updater": "^4.2.2",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
     "node-hue-api": "^4.0.5"
