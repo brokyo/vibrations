@@ -1,207 +1,80 @@
-////////////////////////////////////
-// **** TIMBRE CONFIGURATION **** //
-////////////////////////////////////
-var roomConfig = {
-	reverb: {
-		roomSize: 0.7,
-		dampening: 3000
-	},
-	tremolo: {
-		frequency: 10,
-		type: 'sine',
-		depth: 0.5,
-		spread: 180
-	},
-	delay: {
-		delayTime: 0.25
-	}
-}
-var baseSynthConfig = { 
-	synth: {
-		oscillator: {
-			partials: [ 0.615, 0.29, 0.155, 0.03, 0.065, 0.83, 0, 0, 0 ]
-		},
-		envelope: { 
-			attack: 2.0, 
-			attackCurve: 'linear', 
-			decay: 0.1, 
-			release: 8, 
-			releaseCurve: 'ripple', 
-			sustain: 0.4 
-		}
-	}, 
-	tremolo: { 
-		depth: 0.3, 
-		frequency: 3.1, 
-		spread: 180, 
-		type: 'sine', 
-		wet: 0 
-	}, 
-	vibrato: { 
-		depth: 0.1, 
-		frequency: 3.1, 
-		maxDelay: 0.005, 
-		type: 'sine', 
-		wet: 0.3 
-	}, 
-	phaser: { 
-		Q: 10, 
-		baseFrequency: 669, 
-		frequency: 0.8, 
-		octaves: 3, 
-		stages: 10, 
-		wet: 0.4 
-	}, 
-	feedbackDelay: { 
-		delayTime: 0.55, 
-		feedback: 0.2, 
-		wet: 0.3 
-	}, 
-	chorus: { 
-		delayTime: 2.1, 
-		depth: 0.4, 
-		feedback: 0.1, 
-		frequency: 0.85, 
-		spread: 67, 
-		type: 'sine', 
-		wet: 0.1 
-	}, 
-	EQ3: { 
-		high: -16, 
-		mid: -17,
-		low: -14 
-	},
-	widener: {
-		width: 0.8
-	},
-	panner: {
-		frequency: 1, 
-		type: 'sine', 
-		depth: 0.5
-	},
-	out: {
-		gain: 0.5
-	},
-}
-var baseSynthFollowerConfig = {
-	triggerChance: 0.9,
-	duration: {
-		min: 10,
-		max: 30
-	},
-	velocity: {
-		min: 0.05,
-		max: 0.3
-	}
-}
-var voiceConfig = {
-	portamento: 0.2,
-	osc: {
-		type: 'pulse',
-		width: 0.7,
-		detuneMin: -10,
-		detuneMax: 10
-	},
-	env: {
-		attackCurve: 'linear',
-		decayCurve: 'linear',
-		releaseCurve: 'linear'
-	},
-	noise: {
-		playbackRate: 0.7,
-		volume: -10
-	},
-	voxOut: {
-		gain: 0.2
-	},
-	lineOut: {
-		gain: 0.4
-	}
-}
-var voiceEventConfig = {
-	velocity: {
-		min: 0.3,
-		max: 0.8
-	},
-	attack: {
-		min: 0.5,
-		max: 3
-	},
-	sustain: {
-		min: 5,
-		max: 8
-	},
-	release: {
-		min: 10,
-		max: 18
-	},
-	rest: {
-		min: 6,
-		max: 18
-	}
-}
+/** 
+	TODO: Tone's `Timeline` is a timeline of events that can be manipulated.
+	It contains attack and release events that trigger changes in p5, tone,
+	and hue. Because of this the logic for all three of those libraries is
+	contained in this script. This has annoying and I bet has performance 
+	implications but I don't know how to otherwise use the Timeline object
+	across scripts. Is there a better way to do this?
+**/
 
-//////////////////////////////////
-// **** WAVE CONFIGURATION **** //
-/////////////////////////////////
-var fps = 30
-var utteranceChangeChance = 1.0
-var formantChangeChance = 1.0
-var tonicChangeChance = 1.0
-var notesInWave = 6
-var possibleTonics = ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2']
-var newWaveConfig = {
-	startShift: {
-		min: 1,
-		max: 6
-	},
-	waveRest: 15
-}
-
-
-//////////////////////////
-// **** BEGIN CODE **** //
-//////////////////////////
-
-// ** Initialize Variables ** //
-var timeline = new Tone.Timeline()
+// Global Variables
 var sections = new Array()
-var lightArray = new Array()
-var possibleNotes = new Array()
-var possibleChords = new Array()
-var baseSynth = new Object()
-var room = new Object()
-let utterance = new Object()
-var hueIntegration = false
+var timeline = new Tone.Timeline()
+var lightArray = []
 var waveCount = 0
+var hueIntegration = false
 
-// ** Instrument Classes ** //
-// `BaseSynth` is the underlying drone. It's a polysynth made up one one complex
-// waveform and a bunch of effects
+// Change Variables
+var utteranceChangeChance = 1.0
+var formantChangeChance = 0.5
+var tonicChangeChance = 0.5
+var notesInWave = 5
+
+// Tone Variables
+var tonic = 'E2'
+var possibleTonics = ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2']
+var possibleNotes = []
+var possibleChords = []
+var baseSynth = {}
+var room = {}
+
+// P5 Variables
+let utterance = {
+	length: '',
+	text: ''
+}
+
+
 class BaseSynth {
 	constructor() {
+		var config = { 
+			synth: {oscillator: {partials: [ 0.615, 0.29, 0.155, 0.03, 0.065, 0.83, 0, 0, 0 ]},
+			envelope: { "attack": 2.0, "attackCurve": "linear", "decay": 0.1, "release": 8, "releaseCurve": "ripple", "sustain": 0.4 }}, 
+			tremolo: { "depth": 0.3, "frequency": 3.1, "spread": 180, "type": "sine", "wet": 0 }, 
+			vibrato: { "depth": 0.1, "frequency": 3.1, "maxDelay": 0.005, "type": "sine", "wet": 0.3 }, 
+			phaser: { "Q": 10, "baseFrequency": 669, "frequency": 0.8, "octaves": 3, "stages": 10, "wet": 0.4 }, 
+			feedbackDelay: { "delayTime": 0.55, "feedback": 0.2, "wet": 0.3 }, 
+			chorus: { "delayTime": 2.1, "depth": 0.4, "feedback": 0.1, "frequency": 0.85, "spread": 67, "type": "sine", "wet": 0.1 }, 
+			EQ3: { "high": "-16", "low": "-14", "mid": "-17" },
+			widener: {"width": 0.8},
+			panner: {"frequency": 1, "type": "sine", "dept": 0.5},
+			out: {gain: 0.5}
+		}
+
+
 		this.color = {
 			web: {h: 0, s: 0, v: 0},
 			hue: {h: 0, s: 0, v: 0}
 		}
 		this.synth = new Tone.PolySynth(10, Tone.Synth) 
-		this.synth.set(baseSynthConfig.synth)
-		this.tremolo = new Tone.Tremolo(baseSynthConfig.tremolo)
-		this.vibrato = new Tone.Vibrato(baseSynthConfig.vibrato)
-		this.phaser = new Tone.Phaser(baseSynthConfig.phaser)
-		this.feedbackDelay = new Tone.FeedbackDelay(baseSynthConfig.feedbackDelay)
-		this.chorus = new Tone.Chorus(baseSynthConfig.chorus)
-		this.EQ3 = new Tone.EQ3(baseSynthConfig.EQ3)
-		this.widener = new Tone.StereoWidener(baseSynthConfig.widener)
-		this.panner = new Tone.AutoPanner(baseSynthConfig.panner)
-		this.out = new Tone.Gain(baseSynthConfig.out)
+		this.synth.set(config.synth)
+		this.tremolo = new Tone.Tremolo(config.tremolo)
+		this.vibrato = new Tone.Vibrato(config.vibrato)
+		this.phaser = new Tone.Phaser(config.phaser)
+		this.feedbackDelay = new Tone.FeedbackDelay(config.feedbackDelay)
+		this.chorus = new Tone.Chorus(config.chorus)
+		this.EQ3 = new Tone.EQ3(config.EQ3)
+		this.widener = new Tone.StereoWidener(config.widener)
+		this.panner = new Tone.AutoPanner(config.panner)
+		this.out = new Tone.Gain(config.out)
 
-		this.synth.chain(this.tremolo, this.vibrato, this.phaser, this.feedbackDelay, this.chorus, this.EQ3, this.widener, this.panner, this.out)
+		this.synth.chain(this.tremolo, this.vibrato, this.phaser, this.feedbackDelay, this.chorus, this.EQ3, this.out)
 	}
 }
 
-// `ChorirSection`s are objects that contain the individual Tone voices, and 
-// the color metadata for p5 and Hue.
+// `ChorirSection`s are objects that contain the Tone.js synth patch,
+// the values of that patch, and instructions shared color values of p5/Hue.
+// They are literally the things making sound
 class ChoirSection {
   constructor(config = {id: null, oscCount: 15, position: 0}) {
 	///////////////
@@ -222,28 +95,31 @@ class ChoirSection {
 		iteratorStep: 0.033
 	}
 
+
+
 	///////////
 	// VOICE //
 	///////////
 	this.voice = {}
-	this.voice.portamento = voiceConfig.portamento
+	this.voice.portamento = 0.2
 
 	// -- VOX -- //
-	this.voice.voxOut = new Tone.Gain(voiceConfig.voxOut.gain)
+	this.voice.voxOut = new Tone.Gain(0.2)
 
 	this.voice.oscs = _.times(config.oscCount, function() {
 		return new Tone.OmniOscillator({
-	        type: voiceConfig.osc.type,
-	        width: voiceConfig.osc.width,
-	        detune: _.random(voiceConfig.osc.detuneMin, voiceConfig.osc.detuneMax)
+	        type: 'pulse',
+	        width: 0.7,
+	        detune: _.random(-10, 10)
 		}).start()
 	})
 
+
 	this.voice.envs = _.times(config.oscCount, function() {
 		return new Tone.AmplitudeEnvelope({
-			attackCurve: voiceConfig.env.attackCurve,
-			decayCurve: voiceConfig.env.decayCurve,
-			releaseCurve:  voiceConfig.env.releaseCurve
+			attackCurve: 'linear',
+			decayCurve: 'linear',
+			releaseCurve: 'linear'
 	  })
 	})
 
@@ -252,8 +128,8 @@ class ChoirSection {
 
 	// -- WHITE NOISE -- //
 	this.voice.noise = new Tone.Noise({
-	  playbackRate: voiceConfig.noise.playbackRate,
-	  volume: voiceConfig.noise.volume
+	  playbackRate: 0.7,
+	  volume: -10
 	}).start()
 
 	this.voice.noise.connect(this.voice.envs[0])
@@ -297,7 +173,7 @@ class ChoirSection {
 
 	// -- EFFECTS -- //
 	this.voice.position = new Tone.Panner(config.position)
-	this.voice.lineOut = new Tone.Gain(voiceConfig.lineOut.gain)
+	this.voice.lineOut = new Tone.Gain(0.4)
 
 	this.voice.formantOut.chain(this.voice.position, this.voice.lineOut)
   }
@@ -326,19 +202,41 @@ class ChoirSection {
   }
 }
 
+//** Hue Helpers **//
+function hueAttack(id, finalColor, attackTime) {
+	let colorConfig = {
+		lightId: id,
+		h: finalColor.h,
+		s: finalColor.s,
+		b: finalColor.v,
+		duration: attackTime
+	}
 
-/** 
-	TODO: Tone's `Timeline` is a timeline of events that can be manipulated.
-	It contains attack and release events that trigger changes in p5, tone,
-	and hue. Because of this the logic for all three of those libraries is
-	contained below. This is annoying and I bet has performance implications 
-	but I don't know how to otherwise use the Timeline object across scripts 
-	without a bus?
-**/
+	fetch('hue/attack', {
+		method: 'POST',
+        headers: {'Content-Type':'application/json'},
+		body: JSON.stringify(colorConfig)
+	})
+}
 
-// ** Scheduling Logic ** //
+function hueRelease(id, finalColor, releaseTime) {
 
-//** New Wave Helpers **//
+	let postData = {
+		lightId: id,
+		h: finalColor.h,
+		s: finalColor.s,
+		v: finalColor.v,
+		duration: releaseTime
+	}
+
+	fetch('hue/release', {
+		method: 'POST',
+        headers: {'Content-Type':'application/json'},
+		body: JSON.stringify(postData)
+	})
+}
+
+//** Event Scheduling Helpers **//
 function changeScale(tonic) {
 	let key = Tonal.Key.minorKey(tonic).natural
 
@@ -358,16 +256,27 @@ function getNoteConfig() {
 	// Picks note and colors from current possibilities
 	let nextNote = Tone.Frequency(_.sample(possibleNotes))
 	let nextColor = _.find(ColorMap, {note: nextNote._val.slice(0, -1)})
-	let velocity = _.random(voiceEventConfig.velocity.min, voiceEventConfig.velocity.max)
+	let velocity = _.random(0.3, 0.8)
 
 	return {
 		name: nextNote._val,
 		frequency: nextNote.toFrequency(),
-		webColor: nextColor.webColor,
-		hueColor: nextColor.hueColor,
+		color: nextColor.color,
+		hue: nextColor.hueColor,
 		velocity: velocity 
 	}
 }
+function generateEventTimes() {
+	// Generate random event and envelope times
+	return {
+		attack: _.random(0.5, 2),
+		sustain: _.random(5, 8),
+		release: _.random(10, 18),
+		rest: _.random(6, 18)
+	}
+}
+
+//** P5 Helpers **//
 function getNewUtterance() {
 	fetch('/resources/utterance')
 		.then(res => res.json())
@@ -376,47 +285,7 @@ function getNewUtterance() {
 		})
 }
 
-//** Hue Scheduling Helpers **//
-function hueAttack(id, finalColor, attackTime) {
-	let colorConfig = {
-		lightId: id,
-		h: finalColor.h,
-		s: finalColor.s,
-		b: finalColor.v,
-		duration: attackTime
-	}
-
-	fetch('hue/attack', {
-		method: 'POST',
-        headers: {'Content-Type':'application/json'},
-		body: JSON.stringify(colorConfig)
-	})
-}
-function hueRelease(id, finalColor, releaseTime) {
-	let postData = {
-		lightId: id,
-		h: finalColor.h,
-		s: finalColor.s,
-		v: finalColor.v,
-		duration: releaseTime
-	}
-
-	fetch('hue/release', {
-		method: 'POST',
-        headers: {'Content-Type':'application/json'},
-		body: JSON.stringify(postData)
-	})
-}
-
-//** Event Scheduling Helpers **//
-function generateEventTimes() {
-	return {
-		attack: _.random(voiceEventConfig.attack.min, voiceEventConfig.attack.max),
-		sustain: _.random(voiceEventConfig.sustain.min, voiceEventConfig.sustain.max),
-		release: _.random(voiceEventConfig.release.min, voiceEventConfig.release.max),
-		rest: _.random(voiceEventConfig.rest.min, voiceEventConfig.rest.max)
-	}
-}
+//** Event Scheduling Functions **//
 function createAttackEvent(sectionIndex, noteConfig, eventTimes, startShift) {
 
 	// an attackEvent object triggers changes in music in Tone, and color in
@@ -432,10 +301,10 @@ function createAttackEvent(sectionIndex, noteConfig, eventTimes, startShift) {
 
 		sections[sectionIndex].voice.envs.forEach(env => {
 			env.set({attack: eventTimes.attack, release: eventTimes.release})
-			env.triggerAttack('+0', noteConfig.velocity)
+			env.triggerAttack("+0.1", noteConfig.velocity)
 		})
 
-		if (Math.random() > 1 - baseSynthFollowerConfig.triggerChance) {
+		if (Math.random() > 0.9) {
 			triggerBaseSynth(noteConfig.frequency)
 		}
 
@@ -443,13 +312,13 @@ function createAttackEvent(sectionIndex, noteConfig, eventTimes, startShift) {
 		// Sets base parameters for the next note's coloration 
 		sections[sectionIndex].color.changing = true
 		sections[sectionIndex].color.start = sections[sectionIndex].color.current
-		sections[sectionIndex].color.end = chroma(noteConfig.webColor)
-		sections[sectionIndex].color.iteratorStep = 1 / (eventTimes.attack * fps)
+		sections[sectionIndex].color.end = chroma(noteConfig.color)
+		sections[sectionIndex].color.iteratorStep = 1 / (eventTimes.attack * 30)
 
 		// Hue Event
 		// Triggers call to backend to handle Hue color changes
 		if (hueIntegration) {
-			hueAttack(sections[sectionIndex].id, noteConfig.hueColor, eventTimes.attack)
+			hueAttack(sections[sectionIndex].id, noteConfig.hue, eventTimes.attack)
 		}
 
 	})
@@ -470,7 +339,9 @@ function createReleaseEvent(sectionIndex, eventTimes, startShift) {
 
 	// an releaseEvent object triggers changes in Tone, p5, and Hue and is
 	// scheduled along the timeline in advance
-	var releaseEvent = new Tone.Event(time => {		
+	var releaseEvent = new Tone.Event(time => {
+		// console.log('release', 'section:', sectionIndex)
+		
 		// Tone Event
 		sections[sectionIndex].voice.envs.forEach(env => {
 			env.triggerRelease()
@@ -479,8 +350,8 @@ function createReleaseEvent(sectionIndex, eventTimes, startShift) {
 		// P5 Event
 		// confirms color is off at end
 		sections[sectionIndex].color.changing = true
-		sections[sectionIndex].color.start = sections[sectionIndex].color.current.hex()
-		sections[sectionIndex].color.end = baseSynth.color.web
+		sections[sectionIndex].color.start = sections[sectionIndex].color.current
+		sections[sectionIndex].color.end = chroma({h: baseSynth.color.web.h, s: baseSynth.color.web.s, v: 0.2})
 		sections[sectionIndex].color.iteratorStep = 1 / (eventTimes.release * 30)
 
 		// Hue Event
@@ -513,13 +384,13 @@ function createCompletedEvent(sectionIndex, startShift) {
 	endEvent.type = 'voice_end'
 	endEvent.section = sectionIndex
 
-	// Set the start time and add it to the timeline 
+	// Set the start time and add it to the timeline [add 10 to force brief pause]
 	endEvent.start(Tone.Time().now() + startShift)
 
 	return endEvent
 }
 function scheduleEvents(sectionIndex) {
-	let startShift = _.random(newWaveConfig.startShift.min, newWaveConfig.startShift.max)
+	let startShift = _.random(1, 10)
 
 	// Schedule notes and their affect on light and sound
 	for (let i = 0; i < notesInWave; i++) {
@@ -539,92 +410,92 @@ function scheduleEvents(sectionIndex) {
 	var completedEvent = createCompletedEvent(sectionIndex, startShift)
 	timeline.add(completedEvent)
 }
+
 function completed(startShift) {
 	let finishedSections = _.filter(sections, {active: false})
 	
 	if (finishedSections.length === 4) {
-
 		let releaseEvent = new Tone.Event(time => {
 			baseSynth.synth.releaseAll()
+			sections.forEach(section => {
+				section.color.end = chroma({h: 0, s: 0, v: 0})
+			})
 		})
-		let startShift = 0
-		releaseEvent.time = startShift
-		releaseEvent.start(Tone.Time().now() + startShift)
-		releaseEvent.section = 'base'
-		timeline.add(releaseEvent)
 
-		let waveEnd = new Tone.Event(time => {
-			endWave()
-		})
-		startShift += baseSynthConfig.synth.envelope.release + 5
-		waveEnd.time = 0
-		waveEnd.start(Tone.Time().now() + startShift)
-		waveEnd.section = 'base'
-		timeline.add(waveEnd)
+		releaseEvent.time = 0
+		releaseEvent.start(Tone.Time().now())
+		releaseEvent.type = 'wave_end'
+		releaseEvent.section = 'base'
+
+		timeline.add(releaseEvent)
 
 		let newWaveEvent = new Tone.Event(time => {
 			newWave()
 		})
-		startShift += newWaveConfig.waveRest
-		newWaveEvent.time = 0
-		newWaveEvent.start(Tone.Time().now() + startShift)
-		newWaveEvent.section = 'base'
-		timeline.add(newWaveEvent)
+
+		newWaveEvent.time = 15
+		newWaveEvent.start(Tone.Time().now() + 15)
 	}
 }
+
 function newWave() {
-	getNewUtterance()
+	console.log('new wave')
+	if (waveCount === 0) {
+		getNewUtterance()
+		changeScale(tonic)
+		sections.forEach(section => section.changeFormant(0))
+	} else {
+		if (Math.random() > 1 - utteranceChangeChance) {
+			getNewUtterance()
+		}
 
-	let randomFormant = _.random(0, FormantPresets.length - 1)
-	let formantName = FormantPresets[randomFormant].name
-	sections.forEach(section => section.changeFormant(randomFormant))
+		if (Math.random() > 1 - formantChangeChance) {
+			let randomFormant = _.random(0, FormantPresets.length - 1)
+			sections.forEach(section => section.changeFormant(randomFormant))
+		}
 
-	let tonic = _.sample(possibleTonics)
-	changeScale(tonic)
+		if (Math.random() > 1 - tonicChangeChance) {
+			tonic = _.sample(possibleTonics)
+			changeScale(tonic)
+		}		if (Math.random() > 1 - utteranceChangeChance) {
+			getNewUtterance()
+		}
 
-	console.log('New Wave | Tonic:', tonic, 'Formant:', formantName)
+		if (Math.random() > 1 - formantChangeChance) {
+			let randomFormant = _.random(0, FormantPresets.length - 1)
+			sections.forEach(section => section.changeFormant(randomFormant))
+		}
+
+		if (Math.random() > 1 - tonicChangeChance) {
+			tonic = _.sample(possibleTonics)
+			changeScale(tonic)
+		}
+	}
 
 	baseSynth.synth.triggerAttack(tonic)
 
 	let nextColor = _.find(ColorMap, {note: tonic.slice(0, -1)})
-	baseSynth.color.web = chroma({h: nextColor.webColor.h, s: nextColor.webColor.s, v: 0.15})
+	baseSynth.color.web = nextColor.color
+	baseSynth.color.web.v = 1
 	baseSynth.color.hue = nextColor.hueColor
-	baseSynth.color.hue.v = 0
+	baseSynth.color.hue.v = 1
+
+	console.log(baseSynth.color)
 
 	for (let i = 0; i < sections.length; i++) {
 		sections[i].active = true;
-		sections[i].color.iteratorStep = 1 / (baseSynthConfig.synth.envelope.attack * fps)
-		sections[i].color.end = baseSynth.color.web
-		sections[i].color.changing = true;
 		scheduleEvents(i)
 	}
 	waveCount++
 }
-function endWave() {
-	sections.forEach(section => {
-		section.color.changing = true
-		section.color.start = section.color.current
-		section.color.end = chroma({h: 0, s: 0, v: 0})
 
-	})
-
-	fetch('hue/wave_end', {
-		method: 'POST',
-        headers: {'Content-Type':'application/json'},
-		body: JSON.stringify()
-	})
-
-	utterance.type = 'card'
-	utterance.text = 'awakening systems'
-}
 function triggerBaseSynth(note) {
-	let duration = _.random(baseSynthFollowerConfig.duration.min, baseSynthFollowerConfig.duration.max)
-	let velocity = _.random(baseSynthFollowerConfig.velocity.min, baseSynthFollowerConfig.velocity.max, true)
+	let duration = _.random(10, 30)
+	let velocity = _.random(0.05, 0.3, true)
 	baseSynth.synth.triggerAttackRelease(duration, note, undefined, velocity)
 }
 
 //** Init Libraries **//
-// Tone //
 function initTone() {
 	Tone.Master.set({volume: -100})
 
@@ -639,11 +510,10 @@ function initTone() {
 
 
 	room.in = new Tone.Gain()
-	room.reverb = new Tone.Freeverb(roomConfig.reverb)
-	room.tremolo = new Tone.Tremolo(roomConfig.tremolo)
-	room.delay = new Tone.PingPongDelay(roomConfig.delay)
+	room.reverb = new Tone.Freeverb()
+	room.tremolo = new Tone.Tremolo()
 
-	room.in.chain(room.reverb, room.tremolo, room.delay, Tone.Master)
+	room.in.chain(room.reverb, room.tremolo, Tone.Master)
 
 
 	baseSynth = new BaseSynth()
@@ -654,12 +524,12 @@ function initTone() {
 		section.voice.lineOut.connect(room.in)
 	})
 }
-function startPlayback() {
-	Tone.Transport.start()
-	newWave()
+
+// P5 setup
+function saveImage() {
+	saveCanvas('please_remember' + Date.now(), 'png')
 }
 
-// P5 //
 function preload() {
 	font = loadFont('assets/Abel-Regular.ttf')
 }
@@ -690,17 +560,15 @@ function draw() {
 	textFont(font)
 	fill(255)
 
-	textAlign(CENTER)
-	if (utterance.type === 'short') {
+	if (utterance.length === 'short') {
+		textAlign(CENTER)
 		textSize(45)
 		text(utterance.text, windowWidth / 2, windowHeight / 3)
-	} else if (utterance.type === 'long') {
+	} else {
+		textAlign(CENTER)
 		textSize(40)
 		text(utterance.text, windowWidth * 0.25, windowHeight * 0.1, windowWidth / 2)
-	} else if (utterance.type === 'card') {
-		textSize(65)
-		text(utterance.text, windowWidth / 2, windowHeight / 2)
-	} 
+	}
 
 	textSize(20)
 	text('prepare.awakening.systems', windowWidth / 2, windowHeight - 40)
@@ -709,8 +577,12 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+//** Playback Controls **//
+function startPlayback() {
+	Tone.Transport.start()
+	newWave()
+}
 
-// ** DOM Stuff ** //
 var aboutBanner = document.getElementById('about-banner')
 var startButton = document.getElementById('start-button')
 startButton.addEventListener("click", e => {
@@ -719,22 +591,17 @@ startButton.addEventListener("click", e => {
 	aboutBanner.style.display = 'none'
 	startPlayback()
 })
+
 var screenshotButton = document.getElementById('screenshot-button')
 screenshotButton.addEventListener("click", e => {
 	saveImage()
 })
+
 var infoButton = document.getElementById('info-button')
 infoButton.addEventListener("click", e => {
 	window.open('https://github.com/brokyo/prepare', '_blank')
 })
-var fullscreenButton = document.getElementById('fullscreen-button')
-fullscreenButton.addEventListener("click", e => {
-	toggleFullScreen()
-})
-var logo = document.getElementById('logo')
-logo.addEventListener("click", e => {
-	window.open('https://awakening.systems', '_blank')
-})
+
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
@@ -744,15 +611,26 @@ function toggleFullScreen() {
     }
   }
 }
-function saveImage() {
-	saveCanvas('please_remember' + Date.now(), 'png')
-}
+
+var fullscreenButton = document.getElementById('fullscreen-button')
+fullscreenButton.addEventListener("click", e => {
+	toggleFullScreen()
+})
+
+
+var logo = document.getElementById('logo')
+logo.addEventListener("click", e => {
+	window.open('https://awakening.systems', '_blank')
+})
+
 function hover(element) {
   element.setAttribute('src', 'assets/as_text.svg');
 }
+
 function unhover(element) {
   element.setAttribute('src', 'assets/as.svg');
 }
+
 function checkForHueAndBegin() {
 	fetch('/hue/get_array').then(response => {
 		return response.json()

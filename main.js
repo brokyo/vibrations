@@ -6,7 +6,7 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 1200,
-    // fullscreen:true,
+    fullscreen:true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -15,7 +15,7 @@ function createWindow () {
   mainWindow.loadURL('http://localhost:3000/')
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

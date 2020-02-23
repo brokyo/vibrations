@@ -217,5 +217,21 @@ router.get('/get_array', function(res, res, next) {
 	})
 })
 
+router.post('/wave_end', function(res, res, next) {
+	getCreds().then(creds => {
+		createApi(creds).then(api => {
+			getArray().then(array => {
+				let endState = new LightStateBase
+				endState.off()
+
+				array.forEach(light => {
+					api.lights.setLightState(light.id, endState)
+				})
+				res.status(200).send()
+			})
+		})
+	})
+})
+
 
 module.exports = router;
