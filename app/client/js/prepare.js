@@ -215,9 +215,9 @@ class ChoirSection {
 	///////////
 	this.color = {
 		changing: false,
-		start: chroma({h:0, s:0, v:0}),
-		end: chroma({h:0, s:0, v:0}),
-		current: chroma({h:0, s:0, v:0}),
+		start: {h:0, s:0, v:0},
+		end: {h:0, s:0, v:0},
+		current: {h:0, s:0, v:0},
 		iterator: 0,
 		iteratorStep: 0.033
 	}
@@ -594,7 +594,7 @@ function newWave() {
 	for (let i = 0; i < sections.length; i++) {
 		sections[i].active = true;
 		sections[i].color.iteratorStep = 1 / (baseSynthConfig.synth.envelope.attack * fps)
-		sections[i].color.start = chroma('black')
+		sections[i].color.start = '#000000'
 		sections[i].color.end = baseSynth.color.web
 		sections[i].color.changing = true;
 		scheduleEvents(i)
@@ -605,7 +605,7 @@ function endWave() {
 	sections.forEach(section => {
 		section.color.changing = true
 		section.color.start = section.color.current
-		section.color.end = chroma({h: 0, s: 0, v: 0})
+		section.color.end = {h: 0, s: 0, v: 0}
 
 	})
 

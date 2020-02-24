@@ -1,6 +1,6 @@
 {
   "name": "prepare",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "it only works if you believe in it",
   "main": "main.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "web": "node app/server/server.js",
     "web-dev": "nodemon app/server/server.js",
     "build": "electron-builder build --mac --dir --publish never",
-    "deploy": "electron-builder build --mac --dir --publish always"
+    "deploy": "electron-builder build --mac --publish always"
   },
   "build": {
     "appId": "prepare",
