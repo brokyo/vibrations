@@ -2,3 +2,4 @@ node_modules
 app/server/creds.json
 app/server/array.json
 dist
+electron-builder.yml

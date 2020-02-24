@@ -443,7 +443,7 @@ function createAttackEvent(sectionIndex, noteConfig, eventTimes, startShift) {
 		// Sets base parameters for the next note's coloration 
 		sections[sectionIndex].color.changing = true
 		sections[sectionIndex].color.start = sections[sectionIndex].color.current
-		sections[sectionIndex].color.end = chroma(noteConfig.webColor)
+		sections[sectionIndex].color.end = noteConfig.webColor
 		sections[sectionIndex].color.iteratorStep = 1 / (eventTimes.attack * fps)
 
 		// Hue Event
@@ -479,7 +479,7 @@ function createReleaseEvent(sectionIndex, eventTimes, startShift) {
 		// P5 Event
 		// confirms color is off at end
 		sections[sectionIndex].color.changing = true
-		sections[sectionIndex].color.start = sections[sectionIndex].color.current.hex()
+		sections[sectionIndex].color.start = sections[sectionIndex].color.current
 		sections[sectionIndex].color.end = baseSynth.color.web
 		sections[sectionIndex].color.iteratorStep = 1 / (eventTimes.release * 30)
 
@@ -587,7 +587,7 @@ function newWave() {
 	baseSynth.synth.triggerAttack(tonic)
 
 	let nextColor = _.find(ColorMap, {note: tonic.slice(0, -1)})
-	baseSynth.color.web = chroma({h: nextColor.webColor.h, s: nextColor.webColor.s, v: 0.15})
+	baseSynth.color.web = {h: nextColor.webColor.h, s: nextColor.webColor.s, v: 0.15}
 	baseSynth.color.hue = nextColor.hueColor
 	baseSynth.color.hue.v = 0
 
@@ -674,7 +674,7 @@ function draw() {
 	sections.forEach(section => {
 		if(section.color.changing) {
 			section.color.iterator += section.color.iteratorStep
-			section.color.current = chroma.mix(section.color.start, section.color.end, section.color.iterator, 'hsv')
+			section.color.current = chroma.mix(chroma(section.color.start), chroma(section.color.end), section.color.iterator, 'hsv')
 
 			if (section.color.iterator >= 1) {
 				section.color.changing = false
