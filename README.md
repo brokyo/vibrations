@@ -1,45 +1,47 @@
-# electron-quick-start
 
-**Clone and run for a quick way to see Electron in action.**
+### Absolute_Truths_Described_Indirectly.md
+> _These are some notes on_ [_Perpare_](http://prepare.awakening.systems)_: a [\[cybermystic\]](https://awakening.systems/) tool that helps the universe communicate through the “meaningful coincidence” created by the unknowability of interconnected systems._
+> 
+> _It combines light, color, sound, and AI-generated to help the user change reality through magic. Sit with it in a dark room [headphones recommended] and see if anything happens._
+> 
+> _Integrates with Philips Hue._
 
-This is a minimal Electron application based on the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start) within the Electron documentation.
+#### Cybermysticism
+I like to build tools that combine the new age web aesthetic / “[rejected Western knowledge](https://en.wikipedia.org/wiki/Western_esotericism#Western_esotericism_as_%22rejected_knowledge%22)” with, like, weird computer stuff to see if the universe can communicate through code.
 
-**Use this app along with the [Electron API Demos](https://electronjs.org/#get-started) app for API code examples to help you get started.**
+This one is called Prepare.
 
-A basic Electron application needs just these files:
+It was specifically inspired by _The Mysterium: Preparation for the Final Mystery_; a wild ass week-long performance by composer Alexander Scriabin that would close the door on the current incarnation of humanity and connect all things in the cosmos. It required the creation of a new language, excited all the senses, and was set in a temple that would crumble to nothing by the end of the performance, because of the performance. [It’s amazing](http://www.ernestjournal.co.uk/blog/2016/1/18/scriabin-the-mysterium).
 
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
+Prepare gives the universe room to communicate through the “[meaningful coincidence](https://en.wikipedia.org/wiki/Synchronicity)” brought about by physical color, digital color, audio, and natural language generation. You’ll have to find those coincidences yourself but I've found the more you pay attention the more obvious they are. 
 
-You can learn more about each of these components within the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start).
+It only works if you believe in it.
 
-## To Use
+c u on the other side,  
+APC 🌒
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+#### Sound Explanation [[WebAudio](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)] [[Tone.js](https://tonejs.github.io/)]
 
-```bash
-# Clone this repository
-git clone https://github.com/electron/electron-quick-start
-# Go into the repository
-cd electron-quick-start
-# Install dependencies
-npm install
-# Run the app
-npm start
-```
+The music is created by four software synthesizers. Each synthesizer is given the sound of a chanting chorus [`cybermonks`) built [using the process I describe here](https://medium.com/@brokyo/in-excelsis-i-o-creating-digital-choirs-in-tone-js-f14d84982409).
 
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
+A top-level system schedules eight random notes each with its own random attack, sustain, and release times. These notes regularly overlap to make cords that shift as other notes come in and out.
 
-## Resources for Learning Electron
+All synthesizers perform simultaneously and after all have finished their eight notes they start again with a low percentage chance of changing the vowel sound they’re singing or the key they’re in.
 
-- [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
-- [electronjs.org/community#boilerplates](https://electronjs.org/community#boilerplates) - sample starter apps created by the community
-- [electron/electron-quick-start](https://github.com/electron/electron-quick-start) - a very basic starter Electron app
-- [electron/simple-samples](https://github.com/electron/simple-samples) - small applications with ideas for taking them further
-- [electron/electron-api-demos](https://github.com/electron/electron-api-demos) - an Electron app that teaches you how to use Electron
-- [hokein/electron-sample-apps](https://github.com/hokein/electron-sample-apps) - small demo apps for the various Electron APIs
+#### Color Explanation [[Philip Hue](https://www2.meethue.com/en-us)] [[p5.js](https://p5js.org/)]
 
-## License
+Each note is synced with a change in color that gets more intense as the note's attack time passes and less intense the decay time passes.
 
-[CC0 1.0 (Public Domain)](LICENSE.md)
+Note-to-color correlation is based on Alexander Scriabin’s [_clavier à lumières_](https://en.wikipedia.org/wiki/Clavier_%C3%A0_lumi%C3%A8res)  which was one of his cosmic instruments and intended to trigger powerful things in the universe.
+
+Physical color uses [node-hue-api](https://github.com/peter-murray/node-hue-api) to control the lights in a local environment while the browser uses P5 to mix the colors on the canvas.
+
+Mixing colors on the web is hard but it’s important they match the room so I’m using [chroma.js](https://gka.github.io/chroma.js/) and doing the math in p5’s `draw` loop. This might be ridiculously computational intensive. I don’t know.
+
+#### AI-Generated Text Explanation [[GPT-2](https://github.com/openai/gpt-2)] [[GPT-2 Simple](https://github.com/minimaxir/gpt-2-simple)]
+
+The GPT-2 model was fine-tuned on the `cybermystic` canon including Theosophy books by [Alice Bailey](https://en.wikipedia.org/wiki/Alice_Bailey), Zen Koans, journal articles on theoretical physics, creation myths, Van Morrison lyrics, and lots and lots of internet new age PDFs and [blog posts](https://www.crystalinks.com/directory.html).
+
+All the text was generated on GCP (as possible a place for the god of the wires as any) and the best text were picked and stored in a json file.
+
+A handful of interesting starting phrases were picked to generate the text but the only manual editing was selecting the length. Everything else is directly from the machine.

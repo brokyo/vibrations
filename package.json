@@ -1,6 +1,6 @@
 {
   "name": "prepare",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "it only works if you believe in it",
   "main": "main.js",
   "scripts": {

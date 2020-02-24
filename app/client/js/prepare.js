@@ -456,7 +456,7 @@ function createAttackEvent(sectionIndex, noteConfig, eventTimes, startShift) {
 
 	// Add metadata to event
 	attackEvent.type = 'attack'
-	attackEvent.time = startShift
+	attackEvent.time = 0
 	attackEvent.note = noteConfig.frequency
 	attackEvent.section = sectionIndex
 
@@ -491,7 +491,7 @@ function createReleaseEvent(sectionIndex, eventTimes, startShift) {
   })
 
   // Add metadata to event
-  releaseEvent.time = startShift
+  releaseEvent.time = 0
   releaseEvent.type = 'release'
   releaseEvent.section = sectionIndex
 
@@ -509,7 +509,7 @@ function createCompletedEvent(sectionIndex, startShift) {
 	})
 
 	// Add metadata to the event
-	endEvent.time = startShift
+	endEvent.time = 0
 	endEvent.type = 'voice_end'
 	endEvent.section = sectionIndex
 
@@ -594,6 +594,7 @@ function newWave() {
 	for (let i = 0; i < sections.length; i++) {
 		sections[i].active = true;
 		sections[i].color.iteratorStep = 1 / (baseSynthConfig.synth.envelope.attack * fps)
+		sections[i].color.start = chroma('black')
 		sections[i].color.end = baseSynth.color.web
 		sections[i].color.changing = true;
 		scheduleEvents(i)
