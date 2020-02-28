@@ -1,6 +1,71 @@
 {
    "groups": [
       {
+         "category": "Reality",
+         "options": [
+            {
+               "type": "short",
+               "text": "Reality, then, is not found in the mundane mundane things we call things real."
+            },
+            {
+               "type": "short",
+               "text": "Reality is \n\nthe way it is."
+            },
+            {
+               "type": "short",
+               "text": "Reality is such a small thing in this chain of events that we should not get too attached to it"
+            },
+            {
+               "type": "short",
+               "text": "Reality is \nsimply an extension of\nthe equations of\nnature."
+            },
+            {
+               "type": "short",
+               "text": "Reality is in flux, there is life, try, try, try, try, try, try, try, try, try, try"
+            },
+            {
+               "type": "short",
+               "text": "Reality will pass; your awakening will be complete"
+            },
+            {
+               "type": "short",
+               "text": "Reality is like water"
+            }
+         ]
+      },
+      {
+         "category": "You will know",
+         "options": [
+            {
+               "type": "long",
+               "text": "You will know its true colours. The Tower of Babel will not be discovered until all the coloured stones have been discovered."
+            },
+            {
+               "type": "long",
+               "text": "You will know that Legend is real\n\nWhen you can feel the vibrations\nWhen you can hear the music\nWhen you become attuned\nTo the vibrations\nIn your head"
+            },
+            {
+               "type": "short",
+               "text": "You will know you"
+            },
+            {
+               "type": "short",
+               "text": "You will know that the universe is governed by -----"
+            },
+            {
+               "type": "short",
+               "text": "You will know that all events are born out of one"
+            },
+            {
+               "type": "short",
+               "text": "You will know what happens when you let go."
+            },
+            {
+               
+            }
+         ]
+      }
+      {
          "category": "Affirmation:",
          "options": [
             {
