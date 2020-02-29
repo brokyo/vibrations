@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "electron": "electron .",
-    "web": "node app/server/server.js",
-    "web-dev": "nodemon app/server/server.js",
+    "web:prod": "node app/server/server.js",
+    "web:dev": "nodemon app/server/server.js",
     "build": "electron-builder build --mac --dir --publish never",
     "deploy": "electron-builder build --mac --publish always"
   },
