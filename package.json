@@ -19,7 +19,7 @@
   "postinstall": "electron-builder install-app-deps",
   "repository": {
     "type": "git",
-    "url": "https://github.com/brokyo/prepare_electron"
+    "url": "https://github.com/brokyo/vibrations"
   },
   "author": "apc",
   "license": "CC0-1.0",
@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.4",
-    "electron-json-storage": "^4.1.8",
     "electron-updater": "^4.2.2",
     "express": "^4.17.1",
     "morgan": "^1.9.1",

@@ -1,3 +1,4 @@
+const { app } = require('electron')
 var fs = require('fs')
 var path = require('path');
 var express = require('express');
@@ -8,11 +9,9 @@ const hueApi = v3.api
 const LightStateBase = require('node-hue-api').v3.lightStates.LightState
 var savePath
 
-// TODO: This is a despicable hack to allow this to run in both electron and web
-// There's probably a better approach?
+// Checks where app is running. There's probably a better approach?
 if (isElectron()) {
-	var storage = require('electron-json-storage')
-	savePath = storage.getDataPath() + '/'
+	savePath = app.getPath('userData')
 } else {
 	savePath = 'app/server/assets/'
 }
@@ -94,6 +93,8 @@ router.get('/setup', function(req, res, next) {
 				user: createdUser.username,
 				key: createdUser.clientkey
 			}
+
+			console.log(creds)
 
 			fs.writeFile(savePath + 'creds.json', JSON.stringify(creds), (err) => {
 				if (err) {
