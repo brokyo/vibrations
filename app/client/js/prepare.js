@@ -53,9 +53,9 @@ var baseSynthConfig = {
 		wet: 0.4 
 	}, 
 	feedbackDelay: { 
-		delayTime: 0.55, 
-		feedback: 0.2, 
-		wet: 0.3 
+		delayTime: .95, 
+		feedback: 0.6, 
+		wet: 0.4 
 	}, 
 	chorus: { 
 		delayTime: 2.1, 
@@ -144,7 +144,7 @@ var voiceEventConfig = {
 //////////////////////////////////
 // **** WAVE CONFIGURATION **** //
 /////////////////////////////////
-var fps = 30
+var fps = 15
 var utteranceChangeChance = 1.0
 var formantChangeChance = 1.0
 var tonicChangeChance = 1.0

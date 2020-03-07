@@ -6,6 +6,26 @@ body {
     font-family: Abel;
 }
 
+.header {
+    font-size: 36px !important;
+}
+
+.title {
+    font-weight: 900;
+}
+
+.subtext {
+    font-size: 20px !important;
+}
+
+.blogpost {
+    color: black;
+}
+
+.spacer {
+    margin-top: 26px;
+}
+
 #fullscreen-button {
 	position: fixed;
     top: 10px;

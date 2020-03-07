@@ -45,3 +45,10 @@ The GPT-2 model was fine-tuned on the `cybermystic` canon including Theosophy bo
 All the text was generated on GCP (as possible a place for the god of the wires as any) and the best text were picked and stored in a json file.
 
 A handful of interesting starting phrases were picked to generate the text but the only manual editing was selecting the length. Everything else is directly from the machine.
+
+---
+TODO:
+// More interesting room noises
+// Speak utterances
+// Change name refs to `awakening systems: <prefix>`
+// the thought goes nowhere
