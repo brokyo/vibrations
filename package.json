@@ -1,7 +1,7 @@
 {
-  "name": "prepare",
-  "version": "0.6.1",
-  "description": "it only works if you believe in it",
+  "name": "vibrations",
+  "version": "0.6.5",
+  "description": "the thought goes nowhere",
   "main": "main.js",
   "scripts": {
     "electron": "electron .",
@@ -11,7 +11,7 @@
     "deploy": "electron-builder build --mac --publish always"
   },
   "build": {
-    "appId": "prepare",
+    "appId": "vibrations",
     "mac": {
       "category": "awake.awake.awake.awake"
     }
