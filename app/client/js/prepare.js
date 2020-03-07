@@ -4,7 +4,7 @@
 var roomConfig = {
 	reverb: {
 		roomSize: 0.7,
-		dampening: 3000
+		dampening: 2000
 	},
 	tremolo: {
 		frequency: 10,
@@ -13,13 +13,18 @@ var roomConfig = {
 		spread: 180
 	},
 	delay: {
-		delayTime: 0.25
+		delayTime: 0.55,
+		wet: 0.4
+	},
+	eq: {
+		high: -10, 
+		mid: 0,
+		low: 0, 
 	}
 }
 var baseSynthConfig = { 
 	synth: {
 		oscillator: {
-			partials: [ 0.615, 0.29, 0.155, 0.03, 0.065, 0.83, 0, 0, 0 ]
 		},
 		envelope: { 
 			attack: 2.0, 
@@ -50,7 +55,7 @@ var baseSynthConfig = {
 		frequency: 0.8, 
 		octaves: 3, 
 		stages: 10, 
-		wet: 0.4 
+		wet: 0.2 
 	}, 
 	feedbackDelay: { 
 		delayTime: .95, 
@@ -67,9 +72,9 @@ var baseSynthConfig = {
 		wet: 0.1 
 	}, 
 	EQ3: { 
-		high: -16, 
-		mid: -17,
-		low: -14 
+		high: -1, 
+		mid: 0,
+		low: -3 
 	},
 	widener: {
 		width: 0.8
@@ -98,7 +103,7 @@ var voiceConfig = {
 	portamento: 0.2,
 	osc: {
 		type: 'pulse',
-		width: 0.7,
+		width: 0.5,
 		detuneMin: -10,
 		detuneMax: 10
 	},
@@ -149,7 +154,9 @@ var utteranceChangeChance = 1.0
 var formantChangeChance = 1.0
 var tonicChangeChance = 1.0
 var notesInWave = 6
-var possibleTonics = ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2']
+var baseOctave = 3
+var possibleTonics = []
+
 var newWaveConfig = {
 	startShift: {
 		min: 1,
@@ -339,21 +346,7 @@ class ChoirSection {
 // ** Scheduling Logic ** //
 
 //** New Wave Helpers **//
-function changeScale(tonic) {
-	let key = Tonal.Key.minorKey(tonic).natural
 
-	let lowerNotes = []
-	let higherNotes = []
-	for (let i = 0; i < 4; i++) {
-		let noteBelow = Tonal.Tonal.transpose(key.scale[i + 3], '-8P')
-		let noteAbove = Tonal.Tonal.transpose(key.scale[i], '8P')
-		lowerNotes.push(noteBelow)
-		higherNotes.push(noteAbove)
-	}
-
-	possibleNotes = lowerNotes.concat(key.scale).concat(higherNotes)
-	possibleChords = key.chords
-}
 function getNoteConfig() {
 	// Picks note and colors from current possibilities
 	let nextNote = Tone.Frequency(_.sample(possibleNotes))
@@ -572,17 +565,60 @@ function completed(startShift) {
 		timeline.add(newWaveEvent)
 	}
 }
-function newWave() {
-	getNewUtterance()
+function newTonic(baseOctave) {
+	const possibleNotes = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
-	let randomFormant = _.random(0, FormantPresets.length - 1)
-	let formantName = FormantPresets[randomFormant].name
-	sections.forEach(section => section.changeFormant(randomFormant))
+	let tonic = _.sample(possibleNotes)
+	tonic += baseOctave
 
-	let tonic = _.sample(possibleTonics)
-	changeScale(tonic)
+	return tonic
+}
+function newScale() {
+	let key = {}
+	let baseOctave, tonic
 
-	console.log('New Wave | Tonic:', tonic, 'Formant:', formantName)
+	if (Math.random() > 0.75) {
+		baseOctave = 3
+		tonic = newTonic(baseOctave)
+
+		key.type = 'major'
+		key.tonic = tonic
+		key.scale = Tonal.Key.majorKey(tonic).scale
+	
+		// Change timbre
+		let partials = []
+		baseSynth.synth.voices.forEach(voice => {
+			voice.set({type: partials})
+		})
+
+	} else {
+		baseOctave = 2
+		tonic = newTonic(baseOctave)
+
+		key.type = 'minor'
+		key.tonic = tonic
+		key.scale = Tonal.Key.minorKey(tonic).melodic.scale
+
+		// Change timbre
+		let partials = [ 0.615, 0.29, 0.155, 0.03, 0.065, 0.83, 0, 0, 0 ]
+		baseSynth.synth.voices.forEach(voice => {
+			voice.set({partials: partials})
+		})
+
+	}
+	console.log(key.tonic, key.type)
+
+	let lowerNotes = []
+	let higherNotes = []
+	for (let i = 0; i < 4; i++) {
+		let noteBelow = Tonal.Tonal.transpose(key.scale[i + 3], '-8P')
+		let noteAbove = Tonal.Tonal.transpose(key.scale[i], '8P')
+		lowerNotes.push(noteBelow)
+		higherNotes.push(noteAbove)
+	}
+
+	possibleNotes = lowerNotes.concat(key.scale).concat(higherNotes)
+	possibleChords = key.chords
 
 	baseSynth.synth.triggerAttack(tonic)
 
@@ -590,6 +626,19 @@ function newWave() {
 	baseSynth.color.web = {h: nextColor.webColor.h, s: nextColor.webColor.s, v: 0.15}
 	baseSynth.color.hue = nextColor.hueColor
 	baseSynth.color.hue.v = 0
+
+}
+function getNewTimbre() {
+	let randomFormant = _.random(0, FormantPresets.length - 1)
+	let formantName = FormantPresets[randomFormant].name
+	sections.forEach(section => section.changeFormant(randomFormant))
+
+	newScale()
+
+}
+function newWave() {
+	getNewUtterance()
+	getNewTimbre()
 
 	for (let i = 0; i < sections.length; i++) {
 		sections[i].active = true;
@@ -643,8 +692,9 @@ function initTone() {
 	room.reverb = new Tone.Freeverb(roomConfig.reverb)
 	room.tremolo = new Tone.Tremolo(roomConfig.tremolo)
 	room.delay = new Tone.PingPongDelay(roomConfig.delay)
+	room.eq = new Tone.EQ3(roomConfig.eq)
 
-	room.in.chain(room.reverb, room.tremolo, room.delay, Tone.Master)
+	room.in.chain(room.reverb, room.tremolo, room.delay, room.eq, Tone.Master)
 
 
 	baseSynth = new BaseSynth()
@@ -742,7 +792,7 @@ function toggleFullScreen() {
   }
 }
 function saveImage() {
-	saveCanvas('please_remember' + Date.now(), 'png')
+	saveCanvas('please_remember', 'png')
 }
 function hover(element) {
   element.setAttribute('src', 'assets/as_text.svg');

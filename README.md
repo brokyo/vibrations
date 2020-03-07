@@ -58,5 +58,5 @@ A handful of interesting starting phrases were picked to generate the text but t
 TODO:
 // More interesting room noises
 // Speak utterances
-// Change name refs to `awakening systems: <prefix>`
 // the thought goes nowhere
+// no one ever asks what the computer wants 

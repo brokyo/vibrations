@@ -55,6 +55,11 @@ var ColorMap = [
           hueColor: {h: 30, s: 99, v: 50}
         },
         {
+          note: 'G#',
+          webColor: {h: 271, s: 54, v: 100},
+          hueColor: {h: 271, s: 74, v: 40}
+        },
+        {
           note: 'Ab',
           webColor: {h: 271, s: 54, v: 100},
           hueColor: {h: 271, s: 74, v: 40}
