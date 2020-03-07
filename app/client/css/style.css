@@ -7,7 +7,26 @@ body {
 }
 
 .header {
-    font-size: 36px !important;
+    font-size: 38px;
+}
+
+#download-button {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    padding: 10px;
+    border: 1px solid black;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#download-button:hover {
+    background-color: white;
+}
+
+#download-button a {
+    color: black;
+    text-decoration: none;
 }
 
 .title {
@@ -15,7 +34,7 @@ body {
 }
 
 .subtext {
-    font-size: 20px !important;
+    font-size: 20px;
 }
 
 .blogpost {
@@ -69,6 +88,11 @@ body {
     z-index: 1;
     margin: 140px auto 0px auto;
     border: 2px solid black;
+    cursor: pointer;
+}
+
+#start-button:hover {
+    background-color: white
 }
 
 #start-button span {
@@ -100,8 +124,7 @@ body {
 #about-banner p {
 	margin: 0 auto;
 	padding-top: 12px;
-	font-size: 25px;
-	width: 450px;
+	width: 500px;
 }
 
 #logo {
