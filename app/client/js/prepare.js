@@ -704,7 +704,7 @@ function draw() {
 	} 
 
 	textSize(20)
-	text('prepare.awakening.systems', windowWidth / 2, windowHeight - 40)
+	text('vibrations.awakening.systems', windowWidth / 2, windowHeight - 40)
 }
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
