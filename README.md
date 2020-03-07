@@ -7,7 +7,7 @@
 > _Integrates with Philips Hue._
 
 #### Cybermysticism
-I like to build tools that combine the new age web aesthetic / “[rejected Western knowledge](https://en.wikipedia.org/wiki/Western_esotericism#Western_esotericism_as_%22rejected_knowledge%22)” with, like, weird computer stuff to see if the universe can communicate through code [synchronicity]((https://en.wikipedia.org/wiki/Western_esotericism#Western_esotericism_as_%22rejected_knowledge%22) if you give it enough levers.</a> 
+I like to build tools that combine the new age web aesthetic / “[rejected Western knowledge](https://en.wikipedia.org/wiki/Western_esotericism#Western_esotericism_as_%22rejected_knowledge%22)” with, like, weird computer stuff to see if the universe can communicate through code [synchronicity](https://en.wikipedia.org/wiki/Synchronicity) if you give it enough levers.</a> 
 
 This attempt is called Vibrations.
 
