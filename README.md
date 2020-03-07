@@ -24,7 +24,7 @@ APC 🌒
 
 #### Sound Explanation [[WebAudio](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)] [[Tone.js](https://tonejs.github.io/)]
 
-The music is created by four software synthesizers. Each synthesizer is given the sound of a chanting chorus [`cybermonks`) built [using the process I describe here](https://medium.com/@brokyo/in-excelsis-i-o-creating-digital-choirs-in-tone-js-f14d84982409).
+The music is created by four software synthesizers. Each synthesizer is given the sound of a chanting chorus [`cybermonks`] built [using the process I describe here](https://medium.com/@brokyo/in-excelsis-i-o-creating-digital-choirs-in-tone-js-f14d84982409).
 
 A top-level system schedules eight random notes each with its own random attack, sustain, and release times. These notes regularly overlap to make cords that shift as other notes come in and out.
 
