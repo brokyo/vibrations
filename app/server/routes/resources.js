@@ -13,7 +13,15 @@ router.get('/utterance', function(req, res, next) {
 
 			let randomGroup = Math.floor(Math.random() * utterances.groups.length)
 			let randomOption = Math.floor(Math.random() * utterances.groups[randomGroup].options.length)
-			var selectedUtterance = utterances.groups[randomGroup].options[randomOption]
+			let selectedGroup = utterances.groups[randomGroup]
+			let selectedOption = selectedGroup.options[randomOption]
+
+			selectedUtterance = {
+				prefix: selectedGroup.prefix,
+				type: selectedOption.type,
+				text: selectedOption.text
+			}
+
 			res.send({utterance: selectedUtterance});
 		}
 	})

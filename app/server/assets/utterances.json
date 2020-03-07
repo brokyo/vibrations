@@ -1,10 +1,10 @@
 {
    "groups": [
       {
-         "category": "Reality",
+         "prefix": "reality",
          "options": [
             {
-               "type": "short",
+               "type": "long",
                "text": "Reality, then, is not found in the mundane mundane things we call things real."
             },
             {
@@ -34,7 +34,7 @@
          ]
       },
       {
-         "category": "You will know",
+         "prefix": "you will know",
          "options": [
             {
                "type": "long",
@@ -66,7 +66,7 @@
          ]
       },
       {
-         "category": "Affirmation:",
+         "prefix": "affirmation",
          "options": [
             {
                "type": "long",
@@ -111,7 +111,7 @@
          ]
       },
       {
-         "category": "A Lesson:",
+         "prefix": "A Lesson",
          "options": [
             {
                "type": "short",
@@ -176,7 +176,7 @@
          ]
       },
       {
-         "category": "I am",
+         "prefix": "i am",
          "options": [
             {
                "type": "short",
@@ -193,7 +193,7 @@
          ]
       },
       {
-         "category": "Koan:",
+         "prefix": "koan:",
          "options": [
             {  "type": "short",
                "text": "Koan:  No Me, No Knowledge"
@@ -221,7 +221,7 @@
          ]
       },
       {
-         "category": "Let go",
+         "prefix": "let go",
          "options": [
             {
                "type": "long",
@@ -286,7 +286,7 @@
          ]
       },
       {
-         "category": "Rave",
+         "prefix": "rave",
          "options": [
             {
                "type": "short",
@@ -303,12 +303,7 @@
             {
                "type": "long",
                "text": "rave_1 has learnt how to control the stars using the radio, \n\nnot  to name them, but to describe the four winds that blow their colours \n\n\nThe arrhythmic nature of musical notes also gives them their merit\n\n\nThe ability to create abstract concepts is part of his game \n\n"
-            }
-         ]
-      },
-      {
-         "category": "Rave on!",
-         "options": [
+            },
             {
                "type": "long",
                "text": "rave on!\n\n2nd circuit:\nHigher frequency attacks on the physical world.\n\n3rd circuit:\nPhysical attacks on will power.\n\n4th circuit:\nPhysical attacks on thought.\n\n5th circuit:\nAttacks on touch.\n\n6th circuit:\nPhysical laws break down over distance.\n\n7th circuit:\nUniverse is built on lies.\n\n8th circuit:\nUniverse is built on lies.\n\n9th circuit:\nUniverse is built on confusion.\n"
@@ -340,7 +335,7 @@
          ]
       },
       {
-         "category": "this world is",
+         "prefix": "this world is",
          "options": [
             {
                "type": "short",
@@ -373,7 +368,7 @@
          ]
       },
       {
-         "category": "It has been said",
+         "prefix": "it has been said",
          "options": [
             {
                "type": "short",

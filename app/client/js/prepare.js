@@ -700,7 +700,7 @@ function draw() {
 		text(utterance.text, windowWidth * 0.25, windowHeight * 0.1, windowWidth / 2)
 	} else if (utterance.type === 'card') {
 		textSize(65)
-		text(utterance.text, windowWidth / 2, windowHeight / 2)
+		text(`${utterance.text}: ${utterance.prefix}` , windowWidth / 2, windowHeight / 2)
 	} 
 
 	textSize(20)
@@ -723,10 +723,6 @@ startButton.addEventListener("click", e => {
 var screenshotButton = document.getElementById('screenshot-button')
 screenshotButton.addEventListener("click", e => {
 	saveImage()
-})
-var infoButton = document.getElementById('info-button')
-infoButton.addEventListener("click", e => {
-	window.open('https://github.com/brokyo/prepare', '_blank')
 })
 var fullscreenButton = document.getElementById('fullscreen-button')
 fullscreenButton.addEventListener("click", e => {
