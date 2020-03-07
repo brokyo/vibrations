@@ -7,7 +7,7 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 1200,
-    // fullscreen:true,
+    fullscreen:true,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js')
@@ -15,7 +15,7 @@ function createWindow () {
   })
 
   mainWindow.loadURL('http://localhost:3000/')
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   mainWindow.once('ready-to-show', _ => {
     console.log('ready to show')
