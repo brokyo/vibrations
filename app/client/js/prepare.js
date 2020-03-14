@@ -178,9 +178,20 @@ var possibleNotes = new Array()
 var possibleChords = new Array()
 var baseSynth = new Object()
 var room = new Object()
-let utterance = new Object()
 var hueIntegration = false
 var waveCount = 0
+let activeCard = ''
+let waveMeta = {
+	count: 0,
+	prefix: null,
+	tonic: null,
+	key: null,
+	utterance: {
+		length: null,
+		text: null
+	},
+
+}
 
 // ** Instrument Classes ** //
 // `BaseSynth` is the underlying drone. It's a polysynth made up one one complex
@@ -191,7 +202,7 @@ class BaseSynth {
 			web: {h: 0, s: 0, v: 0},
 			hue: {h: 0, s: 0, v: 0}
 		}
-		this.synth = new Tone.PolySynth(10, Tone.Synth) 
+		this.synth = new Tone.PolySynth(10, Tone.AMSynth) 
 		this.synth.set(baseSynthConfig.synth)
 		this.tremolo = new Tone.Tremolo(baseSynthConfig.tremolo)
 		this.vibrato = new Tone.Vibrato(baseSynthConfig.vibrato)
@@ -365,7 +376,11 @@ function getNewUtterance() {
 	fetch('/resources/utterance')
 		.then(res => res.json())
 		.then(selected => {
-			utterance = selected.utterance
+			let utterance = selected.utterance
+
+			waveMeta.prefix = utterance.prefix
+			waveMeta.utterance.type = utterance.type
+			waveMeta.utterance.text = utterance.text
 		})
 }
 
@@ -415,6 +430,7 @@ function createAttackEvent(sectionIndex, noteConfig, eventTimes, startShift) {
 	// an attackEvent object triggers changes in music in Tone, and color in
 	// p5, and Hue
 	var attackEvent = new Tone.Event(time => {
+		console.table(noteConfig)
 
 		// Tone Event
 		// Changes the oscillator value (note) and attackEnvelope to their new, random values
@@ -573,7 +589,7 @@ function newTonic(baseOctave) {
 
 	return tonic
 }
-function newScale() {
+function getNewScale() {
 	let key = {}
 	let baseOctave, tonic
 
@@ -605,8 +621,10 @@ function newScale() {
 			voice.set({partials: partials})
 		})
 
+		waveMeta.tonic = tonic
+		waveMeta.key =  `${tonic.slice(0, -1)} ${key.type}` 
+
 	}
-	console.log(key.tonic, key.type)
 
 	let lowerNotes = []
 	let higherNotes = []
@@ -632,23 +650,29 @@ function getNewTimbre() {
 	let randomFormant = _.random(0, FormantPresets.length - 1)
 	let formantName = FormantPresets[randomFormant].name
 	sections.forEach(section => section.changeFormant(randomFormant))
-
-	newScale()
-
 }
+
 function newWave() {
+	waveMeta.count++
 	getNewUtterance()
 	getNewTimbre()
+	getNewScale()
+	activeCard = `title`
 
-	for (let i = 0; i < sections.length; i++) {
-		sections[i].active = true;
-		sections[i].color.iteratorStep = 1 / (baseSynthConfig.synth.envelope.attack * fps)
-		sections[i].color.start = '#000000'
-		sections[i].color.end = baseSynth.color.web
-		sections[i].color.changing = true;
-		scheduleEvents(i)
-	}
-	waveCount++
+	setTimeout(() => {
+		activeCard = `performance`
+		for (let i = 0; i < sections.length; i++) {
+			sections[i].active = true;
+			sections[i].color.iteratorStep = 1 / (baseSynthConfig.synth.envelope.attack * fps)
+			sections[i].color.start = '#000000'
+			sections[i].color.end = baseSynth.color.web
+			sections[i].color.changing = true;
+			scheduleEvents(i)
+		}
+	}, 7500)
+
+	console.table(waveMeta)
+
 }
 function endWave() {
 	sections.forEach(section => {
@@ -663,9 +687,6 @@ function endWave() {
         headers: {'Content-Type':'application/json'},
 		body: JSON.stringify()
 	})
-
-	utterance.type = 'card'
-	utterance.text = 'awakening systems'
 }
 function triggerBaseSynth(note) {
 	let duration = _.random(baseSynthFollowerConfig.duration.min, baseSynthFollowerConfig.duration.max)
@@ -742,15 +763,17 @@ function draw() {
 	fill(255)
 
 	textAlign(CENTER)
-	if (utterance.type === 'short') {
-		textSize(45)
-		text(utterance.text, windowWidth / 2, windowHeight / 3)
-	} else if (utterance.type === 'long') {
-		textSize(40)
-		text(utterance.text, windowWidth * 0.25, windowHeight * 0.1, windowWidth / 2)
-	} else if (utterance.type === 'card') {
+	if (activeCard === 'performance') {
+		if(waveMeta.utterance.type == 'short') {
+			textSize(45)
+			text(waveMeta.utterance.text, windowWidth / 2, windowHeight / 3)	
+		} else if (waveMeta.utterance.type === `long`) {
+			textSize(40)
+			text(waveMeta.utterance.text, windowWidth * 0.25, windowHeight * 0.1, windowWidth / 2)	
+		}
+	} else if (activeCard === 'title') {
 		textSize(65)
-		text(`${utterance.text}: ${utterance.prefix}` , windowWidth / 2, windowHeight / 2)
+		text(`awakening sytems: ${waveMeta.prefix}` , windowWidth / 2, windowHeight / 2)
 	} 
 
 	textSize(20)

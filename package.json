@@ -1,6 +1,6 @@
 {
   "name": "vibrations",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "the thought goes nowhere",
   "main": "main.js",
   "scripts": {
