@@ -125,24 +125,40 @@ var voiceConfig = {
 }
 var voiceEventConfig = {
 	velocity: {
-		min: 0.3,
-		max: 0.8
+		min: 0.4,
+		max: 0.9
 	},
+	// attack: {
+	// 	min: 1.0,
+	// 	max: 4.5
+	// },
+	// sustain: {
+	// 	min: 5,
+	// 	max: 8
+	// },
+	// release: {
+	// 	min: 10,
+	// 	max: 18
+	// },
+	// rest: {
+	// 	min: 6,
+	// 	max: 18
+	// }
 	attack: {
-		min: 0.5,
-		max: 3
+		min: 0.2,
+		max: 1.0
 	},
 	sustain: {
-		min: 5,
-		max: 8
+		min: 1,
+		max: 2
 	},
 	release: {
-		min: 10,
-		max: 18
+		min: 0.2,
+		max: 0.4
 	},
 	rest: {
-		min: 6,
-		max: 18
+		min: 2,
+		max: 4	
 	}
 }
 
@@ -582,8 +598,8 @@ function completed(startShift) {
 	}
 }
 function newTonic(baseOctave) {
-	const possibleNotes = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-
+	// const possibleNotes = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+	const possibleNotes = ['G']
 	let tonic = _.sample(possibleNotes)
 	tonic += baseOctave
 
@@ -638,8 +654,6 @@ function getNewScale() {
 	possibleNotes = lowerNotes.concat(key.scale).concat(higherNotes)
 	possibleChords = key.chords
 
-	baseSynth.synth.triggerAttack(tonic)
-
 	let nextColor = _.find(ColorMap, {note: tonic.slice(0, -1)})
 	baseSynth.color.web = {h: nextColor.webColor.h, s: nextColor.webColor.s, v: 0.15}
 	baseSynth.color.hue = nextColor.hueColor
@@ -657,6 +671,7 @@ function newWave() {
 	getNewUtterance()
 	getNewTimbre()
 	getNewScale()
+	baseSynth.synth.triggerAttack(waveMeta.tonic)
 	activeCard = `title`
 
 	setTimeout(() => {
@@ -669,7 +684,7 @@ function newWave() {
 			sections[i].color.changing = true;
 			scheduleEvents(i)
 		}
-	}, 7500)
+	}, 11000)
 
 	console.table(waveMeta)
 
@@ -777,7 +792,8 @@ function draw() {
 	} 
 
 	textSize(20)
-	text('vibrations.awakening.systems', windowWidth / 2, windowHeight - 40)
+	text(average, windowWidth/2, windowHeight - 40)
+	// text('vibrations.awakening.systems', windowWidth / 2, windowHeight - 40)
 }
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
