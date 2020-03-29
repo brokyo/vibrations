@@ -1,6 +1,6 @@
 
 ### Absolute_Truths_Described_Indirectly.md
-> _These are some notes on_ [_Perpare_](http://prepare.awakening.systems)_: a [\[cybermystic\]](https://awakening.systems/) tool that helps the universe communicate through the “meaningful coincidence” created by the unknowability of interconnected systems._
+> _These are some notes on_ [_vibrations_](http://vibrations.awakening.systems)_: a [\[cybermystic\]](https://awakening.systems/) tool that helps the universe communicate through the “meaningful coincidence” created by the unknowability of interconnected systems._
 > 
 > _It combines light, color, sound, and AI-generated to help the user change reality through magic. Sit with it in a dark room [headphones recommended] and see if anything happens._
 > 
