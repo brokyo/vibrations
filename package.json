@@ -30,7 +30,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.4",
     "electron-updater": "^4.2.2",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "morgan": "^1.9.1",
     "node-hue-api": "^4.0.5"
   }
